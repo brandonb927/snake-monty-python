@@ -109,8 +109,8 @@ class TestIt(unittest.TestCase):
         '________3___________' +
         '____________________' +
         '____________F_______' +
-        '___________________1)):
-      moveResponse = move(')
+        '___________________1')):
+      moveResponse = move()
       self.assertEqual(moveResponse, '{"move": "left"}')
 
   def testMoveBottomLeftWall(self):
