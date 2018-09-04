@@ -5,6 +5,7 @@ from api import *
 
 class TestIt(unittest.TestCase):
   snakes = {}
+  you = { 'id' :'1', 'body': []}
 
   def testStart(self):
     with boddle(body='{"game":"myid"}'):
@@ -50,21 +51,26 @@ class TestIt(unittest.TestCase):
     moveRequest['height'] = 20
     moveRequest['width'] = 20
     moveRequest['board']['food'] = []
-    moveRequest['board']['snakes'] = []
     for index in range(400):
       if asciiPicture[index] == 'F':
         moveRequest['board']['food'].append({ 'y': index /20, 'x': index % 20})
       elif asciiPicture[index] == '1':
-        self.getOrCreateYou()
+        self.you['body'].append({ 'y': index /20, 'x': index % 20})   
       elif asciiPicture[index] == '_':
-        # do nothing
-        print ''
+        pass
       else:
-        self.getOrCreateSnake(asciiPicture[index])['body'].append({ 'x': -1, 'y': -1})    
+        self.getOrCreateSnake(asciiPicture[index])['body'].append({ 'y': index /20, 'x': index % 20})    
+    
+    # help
+    moveRequest['board']['snakes'] = self.snakes
+    moveRequest['board']['you'] = self.you
     print '%s' % json.dumps(moveRequest)
 
   def getOrCreateSnake(self, id):
-    print self.snakes
+    if id not in self.snakes:
+      self.snakes[id] = { 'id': id }
+      self.snakes[id]['body'] = []
+    return self.snakes[id]
 
   def addToil(self, moveRequest):
     moveRequest['game'] = { 'id': 'game1'}
