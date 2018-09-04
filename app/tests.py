@@ -4,17 +4,19 @@ from main import *
 from api import *
 
 class TestIt(unittest.TestCase):
-  snakes = {}
-  you = { 'id' :'1', 'body': []}
+  def setUp(self):
+    print "----- In method %s -----" % self._testMethodName
+    self.snakes = {}
+    self.you = { 'id' :'1', 'body': [], 'health': 100}
 
   def testStart(self):
-    with boddle(body='{"game":"myid"}'):
+    with boddle(json='{"game":"myid"}'):
       startResponse = start()
       print 'start %s' % startResponse
       self.assertEqual(startResponse, '{"color": "red"}')
 
   def testMoveInitial(self):
-    with boddle(body=self.generateMoveRequest(
+    with boddle(json=self.generateMoveRequest(
         '____________________' +
         '________2______F____' +
         '____________________' +
@@ -39,7 +41,7 @@ class TestIt(unittest.TestCase):
       self.assertEqual(moveResponse, '{"move": "up"}')
 
   def testMoveTopWall(self):
-    with boddle(body=self.generateMoveRequest(
+    with boddle(json=self.generateMoveRequest(
         '___________1________' +
         '________2______F____' +
         '____________________' +
@@ -64,7 +66,7 @@ class TestIt(unittest.TestCase):
       self.assertEqual(moveResponse, '{"move": "right"}')
 
   def testMoveTopRightWall(self):
-    with boddle(body=self.generateMoveRequest(
+    with boddle(json=self.generateMoveRequest(
         '___________________1' +
         '________2______F____' +
         '____________________' +
@@ -89,7 +91,7 @@ class TestIt(unittest.TestCase):
       self.assertEqual(moveResponse, '{"move": "down"}')
 
   def testMoveBottomRightWall(self):
-    with boddle(body=self.generateMoveRequest(
+    with boddle(json=self.generateMoveRequest(
         '____________________' +
         '________2______F____' +
         '____________________' +
@@ -114,7 +116,7 @@ class TestIt(unittest.TestCase):
       self.assertEqual(moveResponse, '{"move": "left"}')
 
   def testMoveBottomLeftWall(self):
-    with boddle(body=self.generateMoveRequest(
+    with boddle(json=self.generateMoveRequest(
         '____________________' +
         '________2______F____' +
         '____________________' +
@@ -139,7 +141,7 @@ class TestIt(unittest.TestCase):
       self.assertEqual(moveResponse, '{"move": "left"}')
 
   def testMoveTopLeftWall(self):
-    with boddle(body=self.generateMoveRequest(
+    with boddle(json=self.generateMoveRequest(
         '1___________________' +
         '________2______F____' +
         '____________________' +
@@ -166,27 +168,27 @@ class TestIt(unittest.TestCase):
   def generateMoveRequest(self, asciiBoard):
     moveRequest = {}
     self.addToil(moveRequest)
-    self.convert(moveRequest, 
+    self.convert(moveRequest,
         asciiBoard
     )
-    moveRequest['you'] = {}
-    return json.dumps(moveRequest)
+    moveRequest['you'] = self.you
+    return moveRequest
 
   def convert(self, moveRequest, asciiPicture):
     moveRequest['board'] = {}
-    moveRequest['height'] = 20
-    moveRequest['width'] = 20
+    moveRequest['board']['height'] = 20
+    moveRequest['board']['width'] = 20
     moveRequest['board']['food'] = []
     for index in range(400):
       if asciiPicture[index] == 'F':
         moveRequest['board']['food'].append({ 'y': index /20, 'x': index % 20})
       elif asciiPicture[index] == '1':
-        self.you['body'].append({ 'y': index /20, 'x': index % 20})   
+        self.you['body'].append({ 'y': index /20, 'x': index % 20})
       elif asciiPicture[index] == '_':
         pass
       else:
-        self.getOrCreateSnake(asciiPicture[index])['body'].append({ 'y': index /20, 'x': index % 20})    
-    
+        self.getOrCreateSnake(asciiPicture[index])['body'].append({ 'y': index /20, 'x': index % 20})
+
     # help
     moveRequest['board']['snakes'] = self.snakes.values()
     moveRequest['board']['you'] = self.you
