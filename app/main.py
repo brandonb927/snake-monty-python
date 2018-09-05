@@ -50,36 +50,63 @@ def start():
 @bottle.post('/move')
 def move():
     data = bottle.request.json
-    current_direction = 'up'
 
     # print data
     board = data['board']
-    width = board['width']
-    height = board['height']
-    food = board['food']
-    turn = data['turn']
+    board_width = board['width']
+    board_height = board['height']
+    # food = board['food']
+    # turn = data['turn']
 
     you = data['you']
-    health = you['health']
+    # health = you['health']
     body = you['body']
 
     # print board
     # print body
 
-    # # for points in body:
-    # #     print points['x']
-    # #     print points['y']
-
-    # print body[0]
-    #  Top right corner
     head = body[0]
-    if head['y'] == 0:
+
+    # CORNERS
+
+    # Top left corner
+    if head['y'] == 0 and head['x'] == 0:
         current_direction = 'right'
 
-    if head['x'] == board['height']:
+    # Bottom left corner
+    elif head['y'] == board_height - 1 and head['x'] == 0:
+        current_direction = 'up'
+
+    # Top right corner
+    elif head['y'] == 0 and head['x'] == board_width - 1:
         current_direction = 'down'
 
-    #  Top right corner
+    # Bottom right corner
+    elif head['y'] == board_height - 1 and head['x'] == board_width - 1:
+        current_direction = 'left'
+
+
+    # WALLS
+
+    # Top wall
+    elif head['y'] == 0 and head['x'] in range(0, board_width):
+        current_direction = 'right'
+
+    # Right wall
+    elif head['y'] in range(0, board_height) and head['x'] == board_width - 1:
+        current_direction = 'down'
+
+    # Bottom wall
+    elif head['y'] == board_height - 1 and head['x'] in range(0, board_width):
+        current_direction = 'left'
+
+    # Left wall
+    elif head['y'] in range(0, board_height) and head['x'] == 0:
+        current_direction = 'up'
+
+    else:
+        # Always go up, default
+        current_direction = 'up'
 
     print "Moving %s" % current_direction
     return move_response(current_direction)
