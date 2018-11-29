@@ -5,6 +5,8 @@ import bottle
 import json
 
 from api import ping_response, start_response, move_response, end_response
+from utils import determine_direction
+
 
 @bottle.route('/')
 def index():
@@ -51,62 +53,7 @@ def start():
 def move():
     data = bottle.request.json
 
-    # print data
-    board = data['board']
-    board_width = board['width']
-    board_height = board['height']
-    # food = board['food']
-    # turn = data['turn']
-
-    you = data['you']
-    # health = you['health']
-    body = you['body']
-
-    # print board
-    # print body
-
-    head = body[0]
-
-    # CORNERS
-
-    # Top left corner
-    if head['y'] == 0 and head['x'] == 0:
-        current_direction = 'right'
-
-    # Bottom left corner
-    elif head['y'] == board_height - 1 and head['x'] == 0:
-        current_direction = 'up'
-
-    # Top right corner
-    elif head['y'] == 0 and head['x'] == board_width - 1:
-        current_direction = 'down'
-
-    # Bottom right corner
-    elif head['y'] == board_height - 1 and head['x'] == board_width - 1:
-        current_direction = 'left'
-
-
-    # WALLS
-
-    # Top wall
-    elif head['y'] == 0 and head['x'] in range(0, board_width):
-        current_direction = 'right'
-
-    # Right wall
-    elif head['y'] in range(0, board_height) and head['x'] == board_width - 1:
-        current_direction = 'down'
-
-    # Bottom wall
-    elif head['y'] == board_height - 1 and head['x'] in range(0, board_width):
-        current_direction = 'left'
-
-    # Left wall
-    elif head['y'] in range(0, board_height) and head['x'] == 0:
-        current_direction = 'up'
-
-    else:
-        # Always go up, default
-        current_direction = 'up'
+    current_direction = determine_direction(data)
 
     print "Moving %s" % current_direction
     return move_response(current_direction)
@@ -123,6 +70,11 @@ def end():
     print(json.dumps(data))
 
     return end_response()
+
+@bottle.post('/ping')
+def ping():
+    return ''
+
 
 # Expose WSGI app (so gunicorn can find it)
 application = bottle.default_app()

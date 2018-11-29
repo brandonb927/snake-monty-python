@@ -1,7 +1,7 @@
 {
-  "name": "BattleSnake Python",
-  "description": "A simple BattleSnake AI written in Python.",
-  "repository": "https://github.com/sendwithus/battlesnake-python",
+  "name": "Battlesnake Python",
+  "description": "A simple Battlesnake AI written in Python.",
+  "repository": "https://github.com/battlesnakeio/stater-snake-python",
   "website": "http://battlesnake.io",
   "keywords": ["battlesnake","sendwithus"]
 }
