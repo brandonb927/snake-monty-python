@@ -1,7 +1,7 @@
 DIR_U = 'up'
-DIR_DN = 'down'
-DIR_LT = 'left'
-DIR_R = 'rigt'
+DIR_D = 'down'
+DIR_L = 'left'
+DIR_R = 'right'
 
 
 def determine_direction(data):
