@@ -52,9 +52,7 @@ def start():
 @bottle.post('/move')
 def move():
     data = bottle.request.json
-
     current_direction = determine_direction(data)
-
     print "Moving %s" % current_direction
     return move_response(current_direction)
 
@@ -62,12 +60,8 @@ def move():
 @bottle.post('/end')
 def end():
     data = bottle.request.json
-
-    """
-    TODO: If your snake AI was stateful,
-        clean up any stateful objects here.
-    """
     print(json.dumps(data))
+    print "Game %s ended" % data["game"]["id"]
 
     return end_response()
 
