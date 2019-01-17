@@ -35,17 +35,9 @@ def ping():
 
 @bottle.post('/start')
 def start():
-    data = bottle.request.json
-
-    """
-    TODO: If you intend to have a stateful snake AI,
-            initialize your snake state here using the
-            request's data if necessary.
-    """
-    print(json.dumps(data))
-
     color = "#00FF00"
-
+    r = lambda: random.randint(0,255)
+    color = '#%02X%02X%02X' % (r(),r(),r())
     return start_response(color)
 
 
@@ -62,7 +54,6 @@ def end():
     data = bottle.request.json
     print(json.dumps(data))
     print "Game %s ended" % data["game"]["id"]
-
     return end_response()
 
 @bottle.post('/ping')
