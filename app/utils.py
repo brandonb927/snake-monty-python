@@ -25,7 +25,7 @@ def determine_direction(data):
     head = whole_body[0]
     body = whole_body[1:]
 
-    direction = ''
+    direction = 'up'
 
     # CORNERS
 
