@@ -4,8 +4,8 @@ import random
 import bottle
 import json
 
-from api import ping_response, start_response, move_response, end_response
-from utils import determine_direction
+from .api import ping_response, start_response, move_response, end_response
+from .utils import determine_direction
 
 
 @bottle.route('/')
@@ -45,7 +45,7 @@ def start():
 def move():
     data = bottle.request.json
     current_direction = determine_direction(data)
-    print "Moving %s" % current_direction
+    print("Moving %s" % current_direction)
     return move_response(current_direction)
 
 
@@ -53,7 +53,7 @@ def move():
 def end():
     data = bottle.request.json
     print(json.dumps(data))
-    print "Game %s ended" % data["game"]["id"]
+    print("Game %s ended" % data["game"]["id"])
     return end_response()
 
 @bottle.post('/ping')
